@@ -4,66 +4,75 @@
   <meta charset="UTF-8">
   <title>Countdown Ring</title>
   <style>
-    body {
-      background: transparent;
+    html, body {
       margin: 0;
       padding: 0;
+      height: 100%;
+      width: 100%;
+      background: transparent;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      font-family: 'Segoe UI', sans-serif;
     }
 
-    .timer-container {
+    .timer-wrapper {
       position: relative;
-      width: 200px;
-      height: 200px;
+      width: 50vmin;
+      height: 50vmin;
     }
 
     .ring {
       position: absolute;
+      top: 0; left: 0;
       width: 100%;
       height: 100%;
-      border: 8px solid #49aeec;
       border-radius: 50%;
-      box-sizing: border-box;
+      background: conic-gradient(
+        #49aeec 0deg,
+        #1c5c85 180deg,
+        #49aeec 360deg
+      );
+      mask-image: radial-gradient(circle, transparent 60%, black 60.5%);
+      -webkit-mask-image: radial-gradient(circle, transparent 60%, black 60.5%);
       animation: spin 20s linear infinite;
+      z-index: 1;
+    }
+
+    .content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      z-index: 2;
+    }
+
+    .days-count {
+      font-size: 8vmin;
+      font-weight: bold;
+      margin: 0;
+    }
+
+    .label {
+      font-size: 3vmin;
+      font-weight: bold;
+      letter-spacing: 0.1em;
+      margin-top: 0.5vmin;
     }
 
     @keyframes spin {
       from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
     }
-
-    .timer-content {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: white;
-      text-align: center;
-    }
-
-    .days-count {
-      font-size: 2.5em;
-      font-weight: bold;
-      line-height: 1;
-    }
-
-    .label {
-      font-size: 1em;
-      margin-top: 0.2em;
-      font-weight: 500;
-      letter-spacing: 1px;
-    }
   </style>
 </head>
 <body>
 
-  <div class="timer-container">
+  <div class="timer-wrapper">
     <div class="ring"></div>
-    <div class="timer-content">
+    <div class="content">
       <div class="days-count" id="days">--</div>
       <div class="label">DAYS</div>
     </div>
@@ -75,13 +84,12 @@
     function updateDays() {
       const now = new Date().getTime();
       const distance = targetDate - now;
-
       const days = Math.max(0, Math.floor(distance / (1000 * 60 * 60 * 24)));
       document.getElementById("days").textContent = days;
     }
 
     updateDays();
-    setInterval(updateDays, 3600000); // update every hour, no need for 1s
+    setInterval(updateDays, 3600000); // Update hourly
   </script>
 
 </body>
